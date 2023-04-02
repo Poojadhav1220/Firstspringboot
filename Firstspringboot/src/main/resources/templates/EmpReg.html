@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https//www.thymeleaf.org" xmlns:480px>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>EmployeeReg1</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Adamina&amp;display=swap">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="/assets/css/Contact-Form-Clean.css">
+    <link rel="stylesheet" href="/assets/css/Login-Form-Basic-icons.css">
+    <link rel="stylesheet" href="/assets/css/Login-Form-Dark.css">
+    <script src="/assets/bootstrap/sweetalert/dist/popUp.js"></script>
+
+    <script>
+        function filterTbl(input) {
+		  var input, filter, table, tr, td, cell, i, j;
+		  input = document.getElementById("tSearch");
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("tbl");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 1; i < tr.length; i++) {
+		    // Hide the row initially.
+		    tr[i].style.display = "none";
+
+		    td = tr[i].getElementsByTagName("td");
+		    for (var j = 0; j < td.length; j++) {
+		      cell = tr[i].getElementsByTagName("td")[j];
+		      if (cell) {
+		        if (cell.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		          tr[i].style.display = "";
+		          break;
+		        }
+		      }
+		    }
+		  }
+		}
+    </script>
+
+
+</head>
+
+<body>
+
+<script th:inline="javascript">
+        var msg = [[${msg}]]
+
+        if(msg != null)
+        {
+            swal("Employee Registration", msg, "success");
+        }
+        else
+        {
+             swal("Employee deleted", msg, "error");
+        }
+    </script>
+<div
+        th:replace="fragment.html :: NavBar">
+</div>
+    <section class="border-0 border-white contact-clean">
+        <form method="post" ACTION="/emp/save/" th:object="${Employee}" enctype="multipart/form-data" style="padding: 20px;min-width: 800px;" >
+            <div class="container border-0 border-white">
+                <div class="row">
+                    <div class="col-md-6" style="width: 120px;"><button class="btn btn-primary" type="submit" style="height: 50px;width: 100px;margin-top: 10px;" data-bs-target="#formModal" data-bs-toggle="modal"><i class="fas fa-plus"></i>new</button></div>
+                    <div class="col-md-6 col-lg-8"><input class="border rounded-pill border-dark form-control" type="search" id="tSearch" onkeydown="filterTbl()" style="margin-top: 15px;width: 300px;" placeholder="search here..."></div>
+                </div>
+            </div>
+            <div class="modal fade" role="dialog" tabindex="-1" id="formModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header"><input class="form-control" type="text" value="Register !" style="font-size: 20px;font-weight: bold;font-family: 'Abril Fatface', serif;color: var(--bs-link-hover-color);"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                        <div class="modal-body"><input class="form-control" type="text" placeholder="Enter you name" required="" name="name">
+                            <input class="form-control" type="text" placeholder="Enter your designation" name="designation">
+                            <input class="form-control" type="text" placeholder="Enter your salary" required="" name="salary">
+                            <input class="form-control" type="file" name="file" required="" accept="image/*">
+                            <div class="btn-group btn-group-sm" role="group" style="text-align: center;margin-left: 25%;"><button class="btn btn-success" type="submit" style="background: var(--bs-success);height: 45px;margin-top: 15px;">Submit</button><button class="btn btn-primary" type="reset" style="margin-left: 10px;">clear</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3"></div>
+            <div class="mb-3"></div>
+            <div class="table-responsive">
+                <table class="table" id="tbl">
+                    <thead>
+                        <tr class="border-dark" style="font-size: 17px;font-weight: bold;background: rgba(13,110,253,0.29);">
+                            <th>ID</th>
+                            <th>NAME</th>
+                            <th>DESIGNATION</th>
+                            <th>SALARY</th>
+                            <th>IMAGE</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background: rgba(30,107,222,0.07);">
+                        <tr>
+                        <tr th:each="emp :${listEmp}">
+                            <td style="text-align: right;" th:text="${emp.id}">1.</td>
+                            <td style="text-align: left;" th:text="${emp.name}">Akshata</td>
+                            <td style="text-align: left;" th:text="${emp.designation}">Manager</td>
+                            <td style="text-align: right;" th:text="${emp.salary}">700000</td>
+                            <td class="text-end"> <img th:src="@{/assets/img/{fileName}/(fileName = ${emp.id + '.' + emp.exe})}" height="80px" width="100px"> </td>
+                            <td><a th:href="@{/emp/delete/{empID}/(empID=${emp.id})}" class="btn btn-warning bg-danger" role="button"><i class="fa fa-trash" style="color: rgb(248,244,244);"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${(curPage==1)} ? 'disabled'"><a class="page-link" aria-label="Previous" th:href="@{/emp/reg/{curPage}/(curPage=${curPage-1})}"><span aria-hidden="true">«</span></a></li>
+                    <li class="page-item" th:classappend="${(pageNo == curPage)} ? 'active'" th:each="pageNo : ${#numbers.sequence(1, totalPages)}" ><a class="page-link" th:href="@{/emp/reg/{curPage}/(curPage=${pageNo})}" th:text="${pageNo}">1</a></li>
+                    <li class="page-item" th:classappend="${(curPage == totalPages)} ? 'disabled'"><a class="page-link" aria-label="Next" th:href="@{/emp/reg/{curPage}/(curPage=${curPage+1})}"><span aria-hidden="true">»</span></a></li>
+                </ul>
+            </nav>
+        </form>
+    </section>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
