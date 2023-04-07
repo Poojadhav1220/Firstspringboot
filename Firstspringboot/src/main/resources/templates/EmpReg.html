@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/assets/css/Contact-Form-Clean.css">
     <link rel="stylesheet" href="/assets/css/Login-Form-Basic-icons.css">
     <link rel="stylesheet" href="/assets/css/Login-Form-Dark.css">
-    <script src="/assets/bootstrap/sweetalert/dist/popUp.js"></script>
+    <script src="/assets/bootstrap/js/popUp.js"></script>
 
     <script>
         function filterTbl(input) {
@@ -76,6 +76,7 @@
                         <div class="modal-body"><input class="form-control" type="text" placeholder="Enter you name" required="" name="name">
                             <input class="form-control" type="text" placeholder="Enter your designation" name="designation">
                             <input class="form-control" type="text" placeholder="Enter your salary" required="" name="salary">
+                            <input class="form-control" type="date" placeholder="Join date" required="" name="date">
                             <input class="form-control" type="file" name="file" required="" accept="image/*">
                             <div class="btn-group btn-group-sm" role="group" style="text-align: center;margin-left: 25%;"><button class="btn btn-success" type="submit" style="background: var(--bs-success);height: 45px;margin-top: 15px;">Submit</button><button class="btn btn-primary" type="reset" style="margin-left: 10px;">clear</button></div>
                         </div>
@@ -92,17 +93,19 @@
                             <th>NAME</th>
                             <th>DESIGNATION</th>
                             <th>SALARY</th>
+                            <th>JOIN DATE</th>
                             <th>IMAGE</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
                     <tbody style="background: rgba(30,107,222,0.07);">
                         <tr>
-                        <tr th:each="emp :${listEmp}">
+                        <tr th:each="emp :${listEmp}" th:classappend="${emp.salary < 50000} ? 'table-danger text-danger' : (${emp.salary > 50000} ? 'table-success text-success' : 'table-warning text-warning')">
                             <td style="text-align: right;" th:text="${emp.id}">1.</td>
                             <td style="text-align: left;" th:text="${emp.name}">Akshata</td>
                             <td style="text-align: left;" th:text="${emp.designation}">Manager</td>
                             <td style="text-align: right;" th:text="${emp.salary}">700000</td>
+                            <td style="text-align: center;" th:text="${#dates.format(emp.date, 'dd/mm/yyyy')}"></td>
                             <td class="text-end"> <img th:src="@{/assets/img/{fileName}/(fileName = ${emp.id + '.' + emp.exe})}" height="80px" width="100px"> </td>
                             <td><a th:href="@{/emp/delete/{empID}/(empID=${emp.id})}" class="btn btn-warning bg-danger" role="button"><i class="fa fa-trash" style="color: rgb(248,244,244);"></i></a></td>
                         </tr>

@@ -16,7 +16,7 @@
           <li class="nav-item"><a class="nav-link " href="/" th:classappend="${#ctx.springRequestContext.requestUri=='/'} ? 'active'">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="/emp/reg/1/" th:classappend="${#strings.startsWith(#ctx.springRequestContext.requestUri, '/emp/reg/')} ? 'active'">Register</a></li>
 
-        </ul><a class="btn btn-primary ms-md-2" role="button" href="#">Button</a>
+        </ul><a class="btn btn-primary ms-md-2" role="button" href="/logout" >Logout</a>
       </div>
     </div>
   </nav>
